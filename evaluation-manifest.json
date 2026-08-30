@@ -2,6 +2,29 @@
   "release_version": "2.1",
   "team_id": "LSH26-T065",
   "form_receipt_time": "set by the organizer from the Google Form",
+  "team_members": [
+    {
+      "registered_name": "Akib Hasan Pyil",
+      "github_username": "HippomasAKiB1",
+      "major_contribution": "Led repository integration and implementation of the expiry classification, inventory-risk calculations, returned-stock handling, testing, and final Git/deployment workflow.",
+      "evidence_paths_or_commits": [
+        "src/pharmacy.js",
+        "tests/pharmacy.test.js",
+        "README.md",
+        "evaluation-manifest.json"
+      ]
+    },
+    {
+      "registered_name": "Nazat E Rose",
+      "github_username": "Rhythm-099",
+      "major_contribution": "Contributed to interface refinement, inventory and return workflow review, responsive behaviour checks, and manual verification of the user flows before deployment.",
+      "evidence_paths_or_commits": [
+        "src/app.js",
+        "styles.css",
+        "index.html"
+      ]
+    }
+  ],
   "problems": [
     {
       "problem_id": "P02",

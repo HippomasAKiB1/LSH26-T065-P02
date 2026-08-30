@@ -88,12 +88,10 @@ Production systems would additionally add authenticated users, persistent invent
 
 **Approach:** lock down the specification and clarification boundaries first; implement pure date/money/return calculations; test the public fixture shape; then build the operational UI and bonus workflows over the verified engine.
 
-Update before submission:
-
 | Registered member | Major contribution |
 |---|---|
-| TODO | TODO |
-| TODO | TODO |
+| Akib Hasan Pyil (`@HippomasAKiB1`) | Led repository integration and implementation of the expiry classification, inventory-risk calculations, returned-stock handling, testing, and final Git/deployment workflow. |
+| Nazat E Rose (`@Rhythm-099`) | Contributed to interface refinement, inventory and return workflow review, responsive behaviour checks, and manual verification of the user flows before deployment. |
 
 ## AI assistance disclosure
 

@@ -1,0 +1,12 @@
+{
+  "name": "lsh26-t065-p02",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "serve": "node scripts/serve.mjs",
+    "preflight": "node scripts/preflight.mjs"
+  },
+  "devDependencies": {}
+}

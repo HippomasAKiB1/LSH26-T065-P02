@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ShelfGuard pharmacy expiry intelligence dashboard for LofiStack Hackathon 2026 P02" />
+    <meta name="theme-color" content="#0b1220" />
+    <title>ShelfGuard | Pharmacy Expiry Intelligence</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <a class="brand brand-logo" href="#overview" aria-label="ShelfGuard home">
+          <span class="brand-logo-card">
+            <img class="brand-logo-image" src="./assets/brand-logo.png" alt="ShelfGuard" />
+          </span>
+        </a>
+
+        <nav class="header-nav" aria-label="Page sections">
+          <a class="nav-link active" href="#overview">Overview</a>
+          <a class="nav-link" href="#inventory">Inventory</a>
+          <a class="nav-link" href="#returns">Returns</a>
+        </nav>
+
+        <div class="header-actions">
+          <span class="event-chip"><span class="event-dot"></span> LSH26-T065 / P02</span>
+          <label class="btn btn-ghost file-button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0-12 4 4m-4-4L8 7M5 13v6h14v-6"/></svg>
+            Import JSON
+            <input id="file-input" type="file" accept="application/json,.json" hidden />
+          </label>
+          <button class="btn btn-primary" id="add-medicine" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Add medicine
+          </button>
+        </div>
+      </header>
+
+      <main class="page-shell">
+        <section class="hero" id="overview" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <div class="eyebrow-row">
+              <span class="eyebrow">Pharmacy operations console</span>
+              <span class="spec-chip">Rule set v2.1</span>
+            </div>
+            <h1 id="page-title">Catch expiry risk <span>before it becomes a loss.</span></h1>
+            <p>One operational view for near-expiry stock, distributor returns, and the exact taka value currently exposed.</p>
+            <div class="assurance-row" aria-label="Calculation assurances">
+              <span><strong>0-30</strong> inclusive</span>
+              <span><strong>31-90</strong> inclusive</span>
+              <span><strong>Returned</strong> excluded from active totals</span>
+              <span><strong>Money</strong> calculated in paisa</span>
+            </div>
+          </div>
+
+          <article class="risk-hero" aria-label="Immediate value at risk">
+            <div class="risk-hero-top">
+              <span class="risk-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 16.4v.1"/></svg>
+              </span>
+              <span class="live-label"><i></i> Current exposure</span>
+            </div>
+            <div class="risk-amount" data-stat="riskNow">--</div>
+            <p>Expired + expiring within 30 days</p>
+            <div class="risk-hero-footer">
+              <div><span>Priority batches</span><strong data-stat="priorityCount">--</strong></div>
+              <div><span>Active inventory</span><strong data-stat="activeValue">--</strong></div>
+            </div>
+          </article>
+        </section>
+
+        <div id="app-status" class="status-banner" data-kind="loading" role="status" aria-live="polite">
+          <span class="status-indicator"></span><span class="status-text">Loading organizer fixture...</span>
+        </div>
+
+        <section class="source-panel" aria-label="Evaluation data controls">
+          <div class="source-heading">
+            <span class="source-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+            </span>
+            <div><strong>Evaluation data</strong><span>Switch organizer cases without changing the calculation engine.</span></div>
+          </div>
+          <div class="source-controls">
+            <label class="field compact">
+              <span>Case</span>
+              <select id="case-select" aria-label="Judge case"></select>
+            </label>
+            <label class="field compact">
+              <span>Reference date</span>
+              <input id="reference-date" type="date" />
+            </label>
+            <button class="icon-btn" id="reset-case" type="button" title="Reset selected case" aria-label="Reset selected case">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V4m0 0h4M4 4l4.2 4.2A7 7 0 1 1 5.4 15"/></svg>
+            </button>
+          </div>
+          <div id="case-info" class="case-info"></div>
+        </section>
+
+        <section class="kpi-grid" aria-label="Expiry status summary">
+          <button class="kpi-card kpi-expired" type="button" data-filter-status="expired" aria-label="Show expired stock">
+            <div class="kpi-top"><span class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M12 4v8M12 16v.1"/><circle cx="12" cy="12" r="9"/></svg></span><span class="kpi-action">View stock</span></div>
+            <span class="kpi-label">Expired</span>
+            <strong class="kpi-value" data-stat="expired">--</strong>
+            <div class="kpi-meta"><span>Value already at risk</span><strong data-stat="expiredValue">--</strong></div>
+          </button>
+          <button class="kpi-card kpi-soon" type="button" data-filter-status="soon" aria-label="Show stock expiring in 0 to 30 days">
+            <div class="kpi-top"><span class="kpi-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span class="kpi-action">Act now</span></div>
+            <span class="kpi-label">Expiring in 0-30 days</span>
+            <strong class="kpi-value" data-stat="soon">--</strong>
+            <div class="kpi-meta"><span>Return-window exposure</span><strong data-stat="soonValue">--</strong></div>
+          </button>
+          <button class="kpi-card kpi-watch" type="button" data-filter-status="within90" aria-label="Show stock expiring in 31 to 90 days">
+            <div class="kpi-top"><span class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 15l4-4 3 2 5-6"/></svg></span><span class="kpi-action">Plan ahead</span></div>
+            <span class="kpi-label">Expiring in 31-90 days</span>
+            <strong class="kpi-value" data-stat="within90">--</strong>
+            <div class="kpi-meta"><span>Early-warning watchlist</span><strong data-stat="within90Value">--</strong></div>
+          </button>
+          <button class="kpi-card kpi-safe" type="button" data-filter-status="safe" aria-label="Show safe stock">
+            <div class="kpi-top"><span class="kpi-icon"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span class="kpi-action">Healthy</span></div>
+            <span class="kpi-label">Safe beyond 90 days</span>
+            <strong class="kpi-value" data-stat="safe">--</strong>
+            <div class="kpi-meta"><span>Stable active inventory</span><strong data-stat="safeValue">--</strong></div>
+          </button>
+        </section>
+
+        <section class="dashboard-grid" aria-label="Expiry action overview">
+          <article class="panel panel-wide">
+            <div class="panel-head">
+              <div><span class="section-kicker">Action queue</span><h2>Highest-priority batches</h2><p>Expired and near-expiry stock sorted by urgency, then value.</p></div>
+              <span class="micro-badge">Operational</span>
+            </div>
+            <div id="priority-list" class="priority-list"></div>
+          </article>
+
+          <article class="panel exposure-panel">
+            <div class="panel-head">
+              <div><span class="section-kicker">Forward exposure</span><h2>Next 6 months</h2><p>Purchase value scheduled to expire by calendar month.</p></div>
+            </div>
+            <div id="risk-chart" class="risk-chart" aria-label="Six month stock expiry value chart"></div>
+          </article>
+        </section>
+
+        <section class="panel inventory-panel" id="inventory" aria-labelledby="inventory-title">
+          <div class="panel-head inventory-head">
+            <div>
+              <span class="section-kicker">Required stock register</span>
+              <h2 id="inventory-title">Active inventory</h2>
+              <p><span data-stat="activeCount">--</span> active medicines across the selected case.</p>
+            </div>
+            <div class="filters">
+              <label class="search-box">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg>
+                <input id="search" type="search" placeholder="Search medicine, batch, company..." aria-label="Search inventory" />
+              </label>
+              <select id="company-filter" aria-label="Filter by company"><option value="all">All companies</option></select>
+              <select id="status-filter" aria-label="Filter by status">
+                <option value="all">All expiry groups</option>
+                <option value="expired">Expired</option>
+                <option value="soon">0-30 days</option>
+                <option value="within90">31-90 days</option>
+                <option value="safe">Safe</option>
+              </select>
+              <button class="btn btn-ghost btn-compact" id="clear-filters" type="button">Clear</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Medicine</th><th>Company</th><th>Batch</th><th class="number">Qty</th><th>Expiry</th><th>Status</th><th class="number">Unit price</th><th class="number">Stock value</th><th class="action-col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-body"></tbody>
+            </table>
+            <div id="empty-inventory" class="empty-state" hidden>
+              <span class="empty-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16v12H4zM8 10h8"/></svg></span>
+              <strong>No active stock matches these filters.</strong>
+              <span>Clear the filters or search for another medicine.</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel returns-panel" id="returns" aria-labelledby="returns-title">
+          <div class="panel-head inventory-head">
+            <div>
+              <span class="section-kicker">Distributor workflow</span>
+              <h2 id="returns-title">Returned stock <span class="count-pill" id="returned-count">0</span></h2>
+              <p>Returned items are removed from every active count and active value total.</p>
+            </div>
+            <div class="return-rule"><span class="rule-check"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span><strong>Accounting-safe return state</strong><small>Restoring a batch immediately puts it back into active calculations.</small></span></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Medicine</th><th>Company</th><th>Batch</th><th class="number">Qty</th><th class="number">Returned value</th><th class="action-col">Action</th></tr></thead>
+              <tbody id="returned-body"></tbody>
+            </table>
+            <div id="returned-empty" class="empty-state" hidden>
+              <span class="empty-icon"><svg viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></svg></span>
+              <strong>No stock has been returned yet.</strong>
+              <span>Use "Mark returned" from Active inventory to move a batch here.</span>
+            </div>
+          </div>
+        </section>
+
+        <footer>
+          <div><strong>ShelfGuard</strong><span>Built for LofiStack Hackathon 2026</span></div>
+          <div class="footer-meta"><span>Team LSH26-T065</span><span>Problem P02</span><span>Deterministic fixture mode</span></div>
+        </footer>
+      </main>
+    </div>
+
+    <dialog id="add-dialog" class="modal">
+      <div class="modal-shell">
+        <div class="modal-head">
+          <div><span class="section-kicker">Quick add</span><h2>Add shelf stock</h2><p>Common shelf life defaults to one year from the active reference date.</p></div>
+          <button class="icon-btn" id="close-add" type="button" aria-label="Close add medicine dialog"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        </div>
+        <form id="add-form" class="add-form">
+          <label class="field"><span>Medicine name</span><input name="name" required placeholder="e.g. Napa 500" /></label>
+          <label class="field"><span>Company</span><input name="company" required placeholder="e.g. Beximco" /></label>
+          <label class="field"><span>Batch</span><input name="batch" required placeholder="e.g. A1204" /></label>
+          <div class="field-row">
+            <label class="field"><span>Quantity</span><input name="quantity" type="number" min="0" step="1" required value="10" /></label>
+            <label class="field"><span>Unit price (BDT)</span><input name="unit_price_bdt" type="number" min="0" step="0.01" required value="1.00" /></label>
+          </div>
+          <label class="field"><span>Expiry date</span><input id="add-expiry" name="expiry" type="date" required /></label>
+          <div class="modal-actions"><button class="btn btn-ghost" id="cancel-add" type="button">Cancel</button><button class="btn btn-primary" type="submit">Add to active stock</button></div>
+        </form>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./src/app.js"></script>
+  </body>
+</html>

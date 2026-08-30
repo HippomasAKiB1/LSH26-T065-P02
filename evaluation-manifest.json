@@ -1,0 +1,40 @@
+{
+  "release_version": "2.1",
+  "team_id": "LSH26-T065",
+  "form_receipt_time": "set by the organizer from the Google Form",
+  "problems": [
+    {
+      "problem_id": "P02",
+      "repository_url": "TODO",
+      "live_url": "TODO",
+      "commit_sha": "TODO",
+      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection is supported, and judge-shaped JSON can be loaded through Import JSON",
+      "requirements": {
+        "R1": { "status": "complete", "evidence": "Active Inventory loads 40+ medicines from the organizer-shaped fixture and displays the required stock fields." },
+        "R2": { "status": "complete", "evidence": "The four expiry groups are recalculated from the case reference date with tested -1/0/30/31/90/91-day boundaries." },
+        "R3": { "status": "complete", "evidence": "Mark returned moves a batch to the returned register and excludes it before every active group count and active value calculation; restore is also supported." },
+        "R4": { "status": "complete", "evidence": "Expired and 0-30-day value-at-risk totals use quantity x unit_price_bdt with integer-paisa arithmetic." }
+      },
+      "known_limitations": [
+        "Inventory changes are session-only; the hackathon sprint does not include authenticated users or persistent pharmacy storage."
+      ]
+    },
+    {
+      "problem_id": "P08",
+      "repository_url": "TODO",
+      "live_url": "TODO",
+      "commit_sha": "TODO",
+      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection and file loading are supported, and a single P08 JSON case can also be pasted with row-level validation reporting",
+      "requirements": {
+        "R1": { "status": "complete", "evidence": "Loads 60+ students across two classes with six compulsory subjects, one optional subject, separate theory/practical marks, and a distinct AB state." },
+        "R2": { "status": "complete", "evidence": "Pure grading functions implement every published grade band, separate practical pass gate, optional bonus, divisor/cap, compulsory-failure override, GPA, and final letter." },
+        "R3": { "status": "complete", "evidence": "Per-student evidence shows actual marks, subject GP, exact applied rule, failure reasons, optional contribution, uncancelled average, and final GPA." },
+        "R4": { "status": "complete", "evidence": "Independent optional GP<=2/AB, practical<8, and any-AB checking lists follow clarification R-29 and allow overlapping membership." }
+      },
+      "known_limitations": [
+        "Bonus row-level rejected-input reporting supports pasted P08 JSON case data rather than XLSX/CSV parsing.",
+        "Data is session-only; authentication and permanent school result storage are production follow-ups."
+      ]
+    }
+  ]
+}

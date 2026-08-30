@@ -3,7 +3,7 @@
 **Team ID:** `LSH26-T065`  
 **Problem ID:** `P02`  
 **Repository:** `lsh26-t065-p02`  
-**Live URL:** `TODO: add deployed URL before submission`
+**Live URL:** https://lsh-26-t065-p02.vercel.app/
 
 ShelfGuard turns a pharmacy stock list into an operational expiry console: it calculates the four required expiry groups from the active reference date, exposes the exact taka value at immediate risk, and moves distributor returns out of every active count and value in one action.
 

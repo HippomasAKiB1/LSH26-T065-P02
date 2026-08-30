@@ -5,8 +5,8 @@
   "problems": [
     {
       "problem_id": "P02",
-      "repository_url": "TODO",
-      "live_url": "TODO",
+      "repository_url": "https://github.com/HippomasAKiB1/LSH26-T065-P02",
+      "live_url": "https://lsh-26-t065-p02.vercel.app/",
       "commit_sha": "TODO",
       "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection is supported, and judge-shaped JSON can be loaded through Import JSON",
       "requirements": {

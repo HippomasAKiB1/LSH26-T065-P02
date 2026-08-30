@@ -1,12 +1,41 @@
 {
-  "release_version": "2.1",
   "team_id": "LSH26-T065",
-  "form_receipt_time": "set by the organizer from the Google Form",
+  "problem_id": "P02",
+  "repository_name": "lsh26-t065-p02",
+  "live_url": "https://lsh-26-t065-p02.vercel.app",
+  "demo_video_url_optional": "",
+  "event_start_code": "LSH26-8490-C900",
+  "repository_created_before_release": false,
+  "pre_event_materials": [],
+  "sample_data": {
+    "loads_published_fixture": true,
+    "method": "The published P02 fixture is bundled with the application and loads directly in the browser. Judges can also import a compatible JSON case using the Import JSON control.",
+    "reset_instructions": "Use the Reset Case control to restore the selected organizer case to its original state. Reloading the page also restores the published fixture."
+  },
+  "problem_solving_method": "We implemented the pharmacy workflow as a deterministic browser-based calculation engine separated from the presentation layer. Expiry status is calculated from the case reference date using UTC calendar dates, monetary values are handled in integer paisa to avoid floating-point errors, and returned batches are explicitly excluded from all active inventory counts and value-at-risk calculations. This approach was chosen to keep the application reliable, auditable, fast to deploy, and easy for judges to verify with published and unpublished cases.",
+  "requirements": {
+    "R1": {
+      "status": "complete",
+      "evidence": "The Active Inventory section displays the medicine stock register with medicine, company, batch, quantity, expiry date, expiry status, unit purchase price and stock value. Data loading and normalization are implemented in src/pharmacy.js and rendered through src/app.js."
+    },
+    "R2": {
+      "status": "complete",
+      "evidence": "Expiry classification is implemented in src/pharmacy.js using the required boundaries: expired for days below 0, expiring soon for 0-30 days inclusive, 31-90 days inclusive for the watch group, and safe beyond 90 days. The calculated groups are visible in the Overview KPI cards and Active Inventory table."
+    },
+    "R3": {
+      "status": "complete",
+      "evidence": "The distributor return workflow is available from the inventory/action views. Marking a batch returned removes it from active stock counts and active value totals and places it in the Returned Stock section. The return-state calculations are implemented in src/pharmacy.js and the workflow UI in src/app.js."
+    },
+    "R4": {
+      "status": "complete",
+      "evidence": "The Overview displays the monetary value of expired stock and stock expiring within 0-30 days. Stock value is calculated as quantity multiplied by unit purchase price using integer-paisa arithmetic in src/pharmacy.js."
+    }
+  },
   "team_members": [
     {
       "registered_name": "Akib Hasan Pyil",
       "github_username": "HippomasAKiB1",
-      "major_contribution": "Led repository integration and implementation of the expiry classification, inventory-risk calculations, returned-stock handling, testing, and final Git/deployment workflow.",
+      "major_contribution": "Led repository integration and implementation of the expiry-classification engine, inventory-risk calculations, returned-stock handling, automated tests, Git workflow, deployment, and final submission preparation.",
       "evidence_paths_or_commits": [
         "src/pharmacy.js",
         "tests/pharmacy.test.js",
@@ -17,7 +46,7 @@
     {
       "registered_name": "Nazat E Rose",
       "github_username": "Rhythm-099",
-      "major_contribution": "Contributed to interface refinement, inventory and return workflow review, responsive behaviour checks, and manual verification of the user flows before deployment.",
+      "major_contribution": "Contributed to interface and workflow review, inventory and return-flow validation, responsive behaviour checks, and manual verification of the application before deployment.",
       "evidence_paths_or_commits": [
         "src/app.js",
         "styles.css",
@@ -25,39 +54,26 @@
       ]
     }
   ],
-  "problems": [
+  "major_design_decisions": [
+    "Used a dependency-light browser application so the live deployment has no backend or external API dependency that could fail during judging.",
+    "Separated pharmacy calculations in src/pharmacy.js from DOM and interaction code in src/app.js so business rules remain directly testable.",
+    "Used UTC calendar-date calculations so client timezone differences cannot shift expiry classifications.",
+    "Represented monetary values internally in integer paisa to avoid floating-point rounding errors.",
+    "Excluded returned batches before calculating active inventory counts and monetary exposure so all dashboard totals remain internally consistent.",
+    "Provided visible loading, error and empty states along with responsive layouts to keep the required workflow usable across screen sizes."
+  ],
+  "known_limitations": [
+    "The application is client-side only and does not persist inventory changes to a remote database.",
+    "Returned-state changes and manually added medicines are session data and are reset when the organizer case is restored or the application is reloaded.",
+    "Imported JSON is expected to follow the P02 case structure; incompatible input is rejected rather than automatically transformed."
+  ],
+  "ai_tools_used": [
     {
-      "problem_id": "P02",
-      "repository_url": "https://github.com/HippomasAKiB1/LSH26-T065-P02",
-      "live_url": "https://lsh-26-t065-p02.vercel.app/",
-      "commit_sha": "TODO",
-      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection is supported, and judge-shaped JSON can be loaded through Import JSON",
-      "requirements": {
-        "R1": { "status": "complete", "evidence": "Active Inventory loads 40+ medicines from the organizer-shaped fixture and displays the required stock fields." },
-        "R2": { "status": "complete", "evidence": "The four expiry groups are recalculated from the case reference date with tested -1/0/30/31/90/91-day boundaries." },
-        "R3": { "status": "complete", "evidence": "Mark returned moves a batch to the returned register and excludes it before every active group count and active value calculation; restore is also supported." },
-        "R4": { "status": "complete", "evidence": "Expired and 0-30-day value-at-risk totals use quantity x unit_price_bdt with integer-paisa arithmetic." }
-      },
-      "known_limitations": [
-        "Inventory changes are session-only; the hackathon sprint does not include authenticated users or persistent pharmacy storage."
-      ]
-    },
-    {
-      "problem_id": "P08",
-      "repository_url": "TODO",
-      "live_url": "TODO",
-      "commit_sha": "TODO",
-      "loads_sample_data": "yes; organizer JSON fixture is seeded on start, case selection and file loading are supported, and a single P08 JSON case can also be pasted with row-level validation reporting",
-      "requirements": {
-        "R1": { "status": "complete", "evidence": "Loads 60+ students across two classes with six compulsory subjects, one optional subject, separate theory/practical marks, and a distinct AB state." },
-        "R2": { "status": "complete", "evidence": "Pure grading functions implement every published grade band, separate practical pass gate, optional bonus, divisor/cap, compulsory-failure override, GPA, and final letter." },
-        "R3": { "status": "complete", "evidence": "Per-student evidence shows actual marks, subject GP, exact applied rule, failure reasons, optional contribution, uncancelled average, and final GPA." },
-        "R4": { "status": "complete", "evidence": "Independent optional GP<=2/AB, practical<8, and any-AB checking lists follow clarification R-29 and allow overlapping membership." }
-      },
-      "known_limitations": [
-        "Bonus row-level rejected-input reporting supports pasted P08 JSON case data rather than XLSX/CSV parsing.",
-        "Data is session-only; authentication and permanent school result storage are production follow-ups."
-      ]
+      "tool": "ChatGPT",
+      "used_for": "Problem decomposition, implementation drafting and review, edge-case analysis, automated test planning, UI refinement, documentation drafting, and debugging support.",
+      "how_output_was_verified": "The team reviewed the generated suggestions against the published P02 specification and clarifications, ran the automated test suite including expiry-boundary and accounting cases, tested the published organizer fixtures, and manually verified the deployed application workflows."
     }
-  ]
+  ],
+  "licenses_file": "LICENSES.md",
+  "declaration": "The information above is complete and truthful to the best of the team's knowledge."
 }

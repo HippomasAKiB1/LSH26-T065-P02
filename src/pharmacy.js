@@ -1,5 +1,6 @@
 const DAY_MS = 86_400_000;
 
+// Validates YYYY-MM-DD format and parses UTC timestamp to prevent browser timezone shifts
 function requireIsoDate(value, fieldName = "date") {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     throw new Error(`${fieldName} must be YYYY-MM-DD.`);
@@ -25,10 +26,16 @@ export function todayIso() {
   return `${year}-${month}-${day}`;
 }
 
+// Computes day difference using UTC calendar midnights so daylight saving / client timezone cannot alter the count
 export function daysUntilExpiry(today, expiry) {
   return Math.round((requireIsoDate(expiry, "expiry") - requireIsoDate(today, "today")) / DAY_MS);
 }
 
+// Expiry classification boundaries:
+// - days < 0: Expired
+// - 0 <= days <= 30: 0-30 days (inclusive)
+// - 31 <= days <= 90: 31-90 days (inclusive)
+// - days > 90: Safe
 export function classifyDays(days) {
   if (days < 0) return "expired";
   if (days <= 30) return "soon";
@@ -41,6 +48,7 @@ export function classifyItem(item, today) {
   return { days, status: classifyDays(days) };
 }
 
+// Monetary amounts are parsed into integer paisa (1 BDT = 100 paisa) to avoid IEEE 754 floating-point errors
 export function parseMoneyToPaisa(value) {
   const text = String(value).trim();
   if (!/^\d+(?:\.\d{1,2})?$/.test(text)) {
@@ -115,6 +123,7 @@ export function normalizeCase(input) {
   };
 }
 
+// Returned items are excluded before calculating active counts and value-at-risk totals
 export function summarizeStock(items, returnedIds, today) {
   const groups = {
     expired: [],

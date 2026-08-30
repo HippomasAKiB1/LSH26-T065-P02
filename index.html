@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="ShelfGuard pharmacy expiry intelligence dashboard for LofiStack Hackathon 2026 P02" />
+    <meta name="description" content="ShelfGuard pharmacy expiry management console for tracking batch risk, distributor return workflows, and stock exposure." />
     <meta name="theme-color" content="#0b1220" />
-    <title>ShelfGuard | Pharmacy Expiry Intelligence</title>
+    <title>ShelfGuard | Pharmacy Expiry Operations</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -128,7 +128,6 @@
           <article class="panel panel-wide">
             <div class="panel-head">
               <div><span class="section-kicker">Action queue</span><h2>Highest-priority batches</h2><p>Expired and near-expiry stock sorted by urgency, then value.</p></div>
-              <span class="micro-badge">Operational</span>
             </div>
             <div id="priority-list" class="priority-list"></div>
           </article>
@@ -144,7 +143,7 @@
         <section class="panel inventory-panel" id="inventory" aria-labelledby="inventory-title">
           <div class="panel-head inventory-head">
             <div>
-              <span class="section-kicker">Required stock register</span>
+              <span class="section-kicker">Inventory register</span>
               <h2 id="inventory-title">Active inventory</h2>
               <p><span data-stat="activeCount">--</span> active medicines across the selected case.</p>
             </div>
@@ -185,11 +184,11 @@
         <section class="panel returns-panel" id="returns" aria-labelledby="returns-title">
           <div class="panel-head inventory-head">
             <div>
-              <span class="section-kicker">Distributor workflow</span>
+              <span class="section-kicker">Distributor returns</span>
               <h2 id="returns-title">Returned stock <span class="count-pill" id="returned-count">0</span></h2>
               <p>Returned items are removed from every active count and active value total.</p>
             </div>
-            <div class="return-rule"><span class="rule-check"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span><strong>Accounting-safe return state</strong><small>Restoring a batch immediately puts it back into active calculations.</small></span></div>
+            <div class="return-rule"><span class="rule-check"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><span><strong>Active exclusion rule</strong><small>Restoring a batch returns it to active inventory calculations.</small></span></div>
           </div>
           <div class="table-wrap">
             <table>
@@ -205,8 +204,8 @@
         </section>
 
         <footer>
-          <div><strong>ShelfGuard</strong><span>Built for LofiStack Hackathon 2026</span></div>
-          <div class="footer-meta"><span>Team LSH26-T065</span><span>Problem P02</span><span>Deterministic fixture mode</span></div>
+          <div><strong>ShelfGuard</strong><span>Pharmacy Expiry Management</span></div>
+          <div class="footer-meta"><span>Team LSH26-T065</span><span>Problem P02</span><span>Evaluation data loaded</span></div>
         </footer>
       </main>
     </div>
